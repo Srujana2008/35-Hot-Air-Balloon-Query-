@@ -16,10 +16,10 @@ function setup() {
   database=firebase.database();
   createCanvas(1500,700);
 
-  balloon=createSprite(250,450,150,150);
+  balloon=createSprite(450,450,150,150);
   balloon.addAnimation("hotAirBalloon",balloonImage1);
   balloon.scale=0.5;
-  var balloonPosition = database.ref("balloon/height");
+  var balloonPosition = database.ref("/");
   balloonPosition.on("value", readHeight, showError);
   textSize(20); 
 }
@@ -28,6 +28,7 @@ function setup() {
 function draw() {
   background(bg);
 
+  if(height !== undefined){
   if(keyDown(LEFT_ARROW)){
     updateHeight(-10, 0);
     balloon.addAnimation("hotAirBalloon",balloonImage2);
@@ -55,6 +56,7 @@ function draw() {
   }
 
   drawSprites();
+}
   fill(0);
   stroke("white");
   textSize(25);
@@ -62,7 +64,7 @@ function draw() {
 }
 
 function updateHeight(x,y){
-  database.ref("balloon/height").set({
+  database.ref("/").set({
     x : height.x + x,
     y : height.y + y
   })       
@@ -70,6 +72,8 @@ function updateHeight(x,y){
 
 function readHeight(data){
   height = data.val();
+  console.log(height.x)
+  console.log(height.y)
   balloon.x = height.x;
   balloon.y = height.y;
 }
